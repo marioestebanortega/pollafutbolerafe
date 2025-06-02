@@ -1,6 +1,6 @@
 build<.
 
-ng build --configuration production --base-href=/pollafutbolerafe/
+ng build --prod --base-href=/pollafutbolerafe/
 
 despñeigue
 npx angular-cli-ghpages --dir=dist/polla-participantes/browser
