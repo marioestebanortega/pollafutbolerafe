@@ -1,5 +1,5 @@
 <div class="container py-4">
-  <!-- Welcome Section -->
+  <!-- Welcome Section (siempre visible) -->
   <div class="card shadow-lg mb-4 bg-primary text-white">
     <div class="card-body text-center py-5">
       <h1 class="display-4 mb-3">¡Inscríbete a la Polla Futbolera! ⚽</h1>
@@ -27,7 +27,7 @@
     </div>
   </div>
 
-  <!-- Match Info Card -->
+  <!-- Match Info Card (siempre visible) -->
   <div class="card shadow-lg mb-4" *ngIf="matchInfo">
     <div class="card-body">
       <div class="text-center mb-4">
@@ -35,7 +35,6 @@
         <h2 class="h3 mb-2">{{ matchInfo.league.name }}</h2>
         <p class="text-muted">{{ matchInfo.league.round }}</p>
       </div>
-
       <div class="row align-items-center justify-content-center mb-4">
         <div class="col-md-4 text-center">
           <div class="team-card p-3">
@@ -53,7 +52,6 @@
           </div>
         </div>
       </div>
-
       <div class="row text-center">
         <div class="col-md-3">
           <p class="mb-2"><strong>Fecha:</strong><br>{{ getMatchTime() }}</p>
@@ -71,103 +69,153 @@
     </div>
   </div>
 
-  <div class="text-center py-4" *ngIf="matchLoading">
-    <div class="spinner-border text-primary" role="status">
-      <span class="visually-hidden">Cargando...</span>
+  <!-- Tabla de Participantes y Buscador -->
+  <div *ngIf="mostrarTabla">
+    <div class="d-flex justify-content-between align-items-center mb-3">
+      <h2 class="h4 mb-0">Participantes Inscritos</h2>
+      <button class="btn btn-success" (click)="nuevoRegistro()">
+        <i class="bi bi-plus-circle me-2"></i>Nuevo registro
+      </button>
     </div>
-    <p class="mt-2">Cargando información del partido...</p>
+    <div class="mb-3">
+      <input type="text" class="form-control" placeholder="Buscar por nombre o celular..." [(ngModel)]="filtro" (ngModelChange)="onBuscarChange($event)">
+    </div>
+    <div class="table-responsive">
+      <table class="table table-striped table-hover">
+        <thead>
+          <tr>
+            <th>Nombre</th>
+            <th>Celular</th>
+            <th>Ganador</th>
+            <th>1er Tiempo</th>
+            <th>2do Tiempo</th>
+            <th>Acción</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let p of participantesFiltrados">
+            <td>{{ p.name }}</td>
+            <td>{{ p.phone }}</td>
+            <td>{{ p.winner }}</td>
+            <td>{{ p.first_half_score }}</td>
+            <td>{{ p.second_half_score }}</td>
+            <td>
+              <button class="btn btn-primary btn-sm" (click)="seleccionarParticipante(p)">
+                <i class="bi bi-pencil-square me-1"></i>Seleccionar
+              </button>
+            </td>
+          </tr>
+          <tr *ngIf="participantesFiltrados.length === 0">
+            <td colspan="6" class="text-center text-muted">No se encontraron participantes.</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
   </div>
 
-  <!-- Registration Form Card -->
-  <div class="card shadow-lg">
-    <div class="card-body">
-      <h3 class="card-title text-center mb-4">¡Completa tu Inscripción! 🎯</h3>
-      <form [formGroup]="form" (ngSubmit)="onSubmit()">
-        <div class="row mb-3">
-          <div class="col-md-8">
-            <label class="form-label">Número de celular:</label>
-            <input type="tel" class="form-control" formControlName="phone" maxlength="10" pattern="^[0-9]{10}$" [readonly]="phoneDisabled" placeholder="Ej: 3001234567">
-            <small class="form-text text-muted">Usaremos este número para contactarte si ganas</small>
+  <!-- Formulario de Inscripción/Edición -->
+  <div *ngIf="!mostrarTabla">
+    <button class="btn btn-outline-secondary mb-3" (click)="mostrarTabla = true">
+      <i class="bi bi-arrow-left"></i> Volver a la lista
+    </button>
+    <div class="text-center py-4" *ngIf="matchLoading">
+      <div class="spinner-border text-primary" role="status">
+        <span class="visually-hidden">Cargando...</span>
+      </div>
+      <p class="mt-2">Cargando información del partido...</p>
+    </div>
+
+    <!-- Registration Form Card -->
+    <div class="card shadow-lg">
+      <div class="card-body">
+        <h3 class="card-title text-center mb-4">¡Completa tu Inscripción! 🎯</h3>
+        <form [formGroup]="form" (ngSubmit)="onSubmit()">
+          <div class="row mb-3">
+            <div class="col-md-8">
+              <label class="form-label">Número de celular:</label>
+              <input type="tel" class="form-control" formControlName="phone" maxlength="10" pattern="^[0-9]{10}$" [readonly]="phoneDisabled" placeholder="Ej: 3001234567">
+              <small class="form-text text-muted">Usaremos este número para contactarte si ganas</small>
+            </div>
+            <div class="col-md-4 d-flex align-items-end">
+              <button type="button" class="btn btn-primary w-100" (click)="validarCelular()" [disabled]="form.get('phone')?.invalid || isEditing || loading">
+                <i class="bi bi-search me-2"></i>Validar
+              </button>
+            </div>
           </div>
-          <div class="col-md-4 d-flex align-items-end">
-            <button type="button" class="btn btn-primary w-100" (click)="validarCelular()" [disabled]="form.get('phone')?.invalid || isEditing || loading">
-              <i class="bi bi-search me-2"></i>Validar
+
+          <div *ngIf="loading" class="alert alert-info">
+            <div class="spinner-border spinner-border-sm me-2" role="status"></div>
+            Cargando...
+          </div>
+          <div *ngIf="mensaje" class="alert alert-success">{{ mensaje }}</div>
+          <div *ngIf="mensajeError" class="alert alert-danger">{{ mensajeError }}</div>
+
+          <div *ngIf="showForm">
+            <div class="mb-3">
+              <label class="form-label">Tu nombre:</label>
+              <input type="text" class="form-control" formControlName="name" placeholder="¿Cómo te llamas?">
+            </div>
+
+            <div class="mb-3">
+              <label class="form-label">¿Quién ganará?</label>
+              <select class="form-select" formControlName="winner">
+                <ng-container *ngIf="matchInfo?.teams?.home?.name">
+                  <option [value]="matchInfo!.teams!.home!.name">{{ matchInfo!.teams!.home!.name }}</option>
+                </ng-container>
+                <ng-container *ngIf="matchInfo?.teams?.away?.name">
+                  <option [value]="matchInfo!.teams!.away!.name">{{ matchInfo!.teams!.away!.name }}</option>
+                </ng-container>
+                <option value="Empate">Empate</option>
+              </select>
+            </div>
+
+            <div class="row">
+              <div class="col-md-6 mb-3">
+                <label class="form-label">Marcador Primer Tiempo:</label>
+                <input type="text" class="form-control" formControlName="first_half_score" placeholder="Ej: 2-1">
+                <small class="form-text text-muted">
+                  {{ matchInfo?.teams?.home?.name || 'Local' }} - {{ matchInfo?.teams?.away?.name || 'Visitante' }}
+                </small>
+                <ng-container *ngIf="form.get('first_half_score') as firstHalfControl">
+                  <div *ngIf="firstHalfControl.touched && firstHalfControl.errors && firstHalfControl.errors['scoreFormat']" class="text-danger">
+                    El marcador debe tener el formato X-Y (ejemplo: 2-1)
+                  </div>
+                </ng-container>
+              </div>
+              <div class="col-md-6 mb-3">
+                <label class="form-label">Marcador Segundo Tiempo:</label>
+                <input type="text" class="form-control" formControlName="second_half_score" placeholder="Ej: 1-0">
+                <small class="form-text text-muted">
+                  {{ matchInfo?.teams?.home?.name || 'Local' }} - {{ matchInfo?.teams?.away?.name || 'Visitante' }}
+                </small>
+                <ng-container *ngIf="form.get('second_half_score') as secondHalfControl">
+                  <div *ngIf="secondHalfControl.touched && secondHalfControl.errors && secondHalfControl.errors['scoreFormat']" class="text-danger">
+                    El marcador debe tener el formato X-Y (ejemplo: 1-0)
+                  </div>
+                </ng-container>
+              </div>
+            </div>
+
+            <div *ngIf="form.errors && form.errors['winnerCoherence'] && (form.get('winner')?.touched || form.get('first_half_score')?.touched || form.get('second_half_score')?.touched)" class="alert alert-danger">
+              {{ form.errors['winnerCoherence'] }}
+            </div>
+
+            <div class="alert alert-info mb-4">
+              <h5 class="alert-heading">📌 Puntos a ganar:</h5>
+              <ul class="mb-0">
+                <li>Ganador correcto: 3 puntos</li>
+                <li>Marcador primer tiempo: 2 puntos</li>
+                <li>Marcador segundo tiempo: 2 puntos</li>
+                <li>Marcador final exacto: 3 puntos extra</li>
+              </ul>
+            </div>
+
+            <button type="submit" class="btn btn-success btn-lg w-100" [disabled]="form.invalid || loading">
+              <i class="bi bi-check-circle me-2"></i>{{ isEditing ? 'Actualizar Predicción' : '¡Completar mi Inscripción!' }}
             </button>
           </div>
-        </div>
-
-        <div *ngIf="loading" class="alert alert-info">
-          <div class="spinner-border spinner-border-sm me-2" role="status"></div>
-          Cargando...
-        </div>
-        <div *ngIf="mensaje" class="alert alert-success">{{ mensaje }}</div>
-        <div *ngIf="mensajeError" class="alert alert-danger">{{ mensajeError }}</div>
-
-        <div *ngIf="showForm">
-          <div class="mb-3">
-            <label class="form-label">Tu nombre:</label>
-            <input type="text" class="form-control" formControlName="name" placeholder="¿Cómo te llamas?">
-          </div>
-
-          <div class="mb-3">
-            <label class="form-label">¿Quién ganará?</label>
-            <select class="form-select" formControlName="winner">
-              <ng-container *ngIf="matchInfo?.teams?.home?.name">
-                <option [value]="matchInfo!.teams!.home!.name">{{ matchInfo!.teams!.home!.name }}</option>
-              </ng-container>
-              <ng-container *ngIf="matchInfo?.teams?.away?.name">
-                <option [value]="matchInfo!.teams!.away!.name">{{ matchInfo!.teams!.away!.name }}</option>
-              </ng-container>
-              <option value="Empate">Empate</option>
-            </select>
-          </div>
-
-          <div class="row">
-            <div class="col-md-6 mb-3">
-              <label class="form-label">Marcador Primer Tiempo:</label>
-              <input type="text" class="form-control" formControlName="first_half_score" placeholder="Ej: 2-1">
-              <small class="form-text text-muted">
-                {{ matchInfo?.teams?.home?.name || 'Local' }} - {{ matchInfo?.teams?.away?.name || 'Visitante' }}
-              </small>
-              <ng-container *ngIf="form.get('first_half_score') as firstHalfControl">
-                <div *ngIf="firstHalfControl.touched && firstHalfControl.errors && firstHalfControl.errors['scoreFormat']" class="text-danger">
-                  El marcador debe tener el formato X-Y (ejemplo: 2-1)
-                </div>
-              </ng-container>
-            </div>
-            <div class="col-md-6 mb-3">
-              <label class="form-label">Marcador Segundo Tiempo:</label>
-              <input type="text" class="form-control" formControlName="second_half_score" placeholder="Ej: 1-0">
-              <small class="form-text text-muted">
-                {{ matchInfo?.teams?.home?.name || 'Local' }} - {{ matchInfo?.teams?.away?.name || 'Visitante' }}
-              </small>
-              <ng-container *ngIf="form.get('second_half_score') as secondHalfControl">
-                <div *ngIf="secondHalfControl.touched && secondHalfControl.errors && secondHalfControl.errors['scoreFormat']" class="text-danger">
-                  El marcador debe tener el formato X-Y (ejemplo: 1-0)
-                </div>
-              </ng-container>
-            </div>
-          </div>
-
-          <div *ngIf="form.errors && form.errors['winnerCoherence'] && (form.get('winner')?.touched || form.get('first_half_score')?.touched || form.get('second_half_score')?.touched)" class="alert alert-danger">
-            {{ form.errors['winnerCoherence'] }}
-          </div>
-
-          <div class="alert alert-info mb-4">
-            <h5 class="alert-heading">📌 Puntos a ganar:</h5>
-            <ul class="mb-0">
-              <li>Ganador correcto: 3 puntos</li>
-              <li>Marcador primer tiempo: 2 puntos</li>
-              <li>Marcador segundo tiempo: 2 puntos</li>
-              <li>Marcador final exacto: 3 puntos extra</li>
-            </ul>
-          </div>
-
-          <button type="submit" class="btn btn-success btn-lg w-100" [disabled]="form.invalid || loading">
-            <i class="bi bi-check-circle me-2"></i>{{ isEditing ? 'Actualizar Predicción' : '¡Completar mi Inscripción!' }}
-          </button>
-        </div>
-      </form>
+        </form>
+      </div>
     </div>
   </div>
 </div> 

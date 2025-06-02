@@ -1,13 +1,14 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ReactiveFormsModule, FormBuilder, FormGroup, Validators, AbstractControl, ValidationErrors, ValidatorFn } from '@angular/forms';
+import { FormsModule } from '@angular/forms';
 import { ParticipanteService, ParticipanteResponse } from '../services/participante.service';
 import { PartidoService, MatchInfo } from '../services/partido.service';
 
 @Component({
   selector: 'app-participante-form',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule],
+  imports: [CommonModule, ReactiveFormsModule, FormsModule],
   templateUrl: './participante-form.component.html',
   styleUrls: ['./participante-form.component.scss']
 })
@@ -21,6 +22,10 @@ export class ParticipanteFormComponent implements OnInit {
   loading = false;
   matchLoading = true;
   matchInfo: MatchInfo | null = null;
+  participantes: { name: string; phone: string; winner: string; first_half_score: string; second_half_score: string }[] = [];
+  participantesFiltrados: { name: string; phone: string; winner: string; first_half_score: string; second_half_score: string }[] = [];
+  filtro: string = '';
+  mostrarTabla: boolean = true;
 
   // Custom validator for winner coherence as a class property to access this.matchInfo
   winnerCoherenceValidator: ValidatorFn = (control: AbstractControl): ValidationErrors | null => {
@@ -64,6 +69,7 @@ export class ParticipanteFormComponent implements OnInit {
 
   ngOnInit() {
     this.loadMatchInfo();
+    this.loadParticipantes();
   }
 
   loadMatchInfo() {
@@ -79,6 +85,47 @@ export class ParticipanteFormComponent implements OnInit {
         this.matchLoading = false;
       }
     });
+  }
+
+  loadParticipantes() {
+    this.participanteService.getParticipantes().subscribe({
+      next: (data) => {
+        this.participantes = data;
+        this.filtrarParticipantes();
+      },
+      error: (error: Error) => {
+        console.error('Error al cargar participantes:', error);
+      }
+    });
+  }
+
+  filtrarParticipantes() {
+    const filtroLower = this.filtro.toLowerCase();
+    this.participantesFiltrados = this.participantes.filter(p =>
+      p.name.toLowerCase().includes(filtroLower) ||
+      p.phone.includes(this.filtro)
+    );
+  }
+
+  onBuscarChange(valor: any) {
+    this.filtro = typeof valor === 'string' ? valor : (valor?.target?.value || '');
+    this.filtrarParticipantes();
+  }
+
+  seleccionarParticipante(participante: { name: string; phone: string }) {
+    this.mostrarTabla = false;
+    this.form.reset();
+    this.form.get('phone')?.setValue(participante.phone);
+    this.phoneDisabled = true;
+    this.validarCelular();
+  }
+
+  nuevoRegistro() {
+    this.mostrarTabla = false;
+    this.form.reset();
+    this.phoneDisabled = false;
+    this.showForm = false;
+    this.isEditing = false;
   }
 
   validarCelular() {
@@ -97,7 +144,7 @@ export class ParticipanteFormComponent implements OnInit {
           this.loading = false;
           if (response && response.name) {
             console.log('[VALIDAR] Participante encontrado, actualizando formulario');
-            this.mensaje = 'Celular encontrado. Puedes actualizar tus predicciones.';
+            this.mensaje = '¡Bienvenido! Registra tus datos para hacer parte de la Polla Futbolera.';
             this.isEditing = true;
             let winnerValue = response.winner;
             if (winnerValue === 'Local') {
@@ -148,6 +195,8 @@ export class ParticipanteFormComponent implements OnInit {
             this.showForm = false;
             this.phoneDisabled = false;
             this.isEditing = false;
+            this.mostrarTabla = true;
+            this.loadParticipantes();
           },
           error: (error: Error) => {
             this.loading = false;
@@ -163,6 +212,8 @@ export class ParticipanteFormComponent implements OnInit {
             this.form.reset();
             this.showForm = false;
             this.phoneDisabled = false;
+            this.mostrarTabla = true;
+            this.loadParticipantes();
           },
           error: (error: Error) => {
             this.loading = false;

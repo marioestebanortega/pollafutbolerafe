@@ -41,4 +41,8 @@ export class ParticipanteService {
   actualizarParticipante(data: ParticipanteData): Observable<any> {
     return this.http.put(`${this.apiUrl}/actualizar-participante`, data);
   }
+
+  getParticipantes(): Observable<{ name: string; phone: string; winner: string; first_half_score: string; second_half_score: string }[]> {
+    return this.http.get<{ name: string; phone: string; winner: string; first_half_score: string; second_half_score: string }[]>(`${this.apiUrl}/participantes`);
+  }
 } 
