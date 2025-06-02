@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
+import { environment } from '../../environments/environment';
 
 export interface MatchInfo {
   fixture: {
@@ -57,7 +58,7 @@ export interface MatchInfo {
   providedIn: 'root'
 })
 export class PartidoService {
-  private apiUrl = 'http://127.0.0.1:10000';
+  private apiUrl = environment.apiUrl;
 
   constructor(private http: HttpClient) { }
 

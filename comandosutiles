@@ -1,0 +1,6 @@
+build<.
+
+npx ng build --base-href=/pollafutbolerafe/  
+
+despñeigue
+npx angular-cli-ghpages --dir=dist/polla-participantes/browser

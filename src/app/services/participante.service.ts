@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { Observable } from 'rxjs';
+import { environment } from '../../environments/environment';
 
 export interface ParticipanteResponse {
   exists: boolean;
@@ -23,7 +24,7 @@ export interface ParticipanteData {
   providedIn: 'root'
 })
 export class ParticipanteService {
-  private apiUrl = 'http://127.0.0.1:10000';
+  private apiUrl = environment.apiUrl;
 
   constructor(private http: HttpClient) { }
 
