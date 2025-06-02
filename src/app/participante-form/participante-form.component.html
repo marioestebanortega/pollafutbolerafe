@@ -27,43 +27,37 @@
     </div>
   </div>
 
-  <!-- Match Info Card (siempre visible) -->
-  <div class="card shadow-lg mb-4" *ngIf="matchInfo">
-    <div class="card-body">
-      <div class="text-center mb-4">
-        <img [src]="matchInfo.league.logo" [alt]="matchInfo.league.name" class="img-fluid mb-3" style="max-width: 120px;">
-        <h2 class="h3 mb-2">{{ matchInfo.league.name }}</h2>
-        <p class="text-muted">{{ matchInfo.league.round }}</p>
+  <!-- Match Info Card (compacta) -->
+  <div class="card shadow-sm mb-3" *ngIf="matchInfo">
+    <div class="card-body p-3">
+      <div class="text-center mb-2">
+        <img [src]="matchInfo.league.logo" [alt]="matchInfo.league.name" class="img-fluid mb-2" style="max-width: 70px;">
+        <h2 class="h5 mb-1">{{ matchInfo.league.name }}</h2>
+        <p class="text-muted mb-2" style="font-size: 1rem;">{{ matchInfo.league.round }}</p>
       </div>
-      <div class="row align-items-center justify-content-center mb-4">
-        <div class="col-md-4 text-center">
-          <div class="team-card p-3">
-            <img [src]="matchInfo.teams.home.logo" [alt]="matchInfo.teams.home.name" class="img-fluid mb-3" style="max-width: 150px;">
-            <h3 class="h4">{{ matchInfo.teams.home.name }}</h3>
+      <div class="row align-items-center justify-content-center mb-2">
+        <div class="col-5 text-center">
+          <div class="team-card p-1">
+            <img [src]="matchInfo.teams.home.logo" [alt]="matchInfo.teams.home.name" class="img-fluid mb-1" style="max-width: 60px;">
+            <div class="small">{{ matchInfo.teams.home.name }}</div>
           </div>
         </div>
-        <div class="col-md-2 text-center">
-          <span class="display-6 fw-bold text-primary">VS</span>
+        <div class="col-2 text-center">
+          <span class="fw-bold text-primary" style="font-size: 1.3rem;">VS</span>
         </div>
-        <div class="col-md-4 text-center">
-          <div class="team-card p-3">
-            <img [src]="matchInfo.teams.away.logo" [alt]="matchInfo.teams.away.name" class="img-fluid mb-3" style="max-width: 150px;">
-            <h3 class="h4">{{ matchInfo.teams.away.name }}</h3>
+        <div class="col-5 text-center">
+          <div class="team-card p-1">
+            <img [src]="matchInfo.teams.away.logo" [alt]="matchInfo.teams.away.name" class="img-fluid mb-1" style="max-width: 60px;">
+            <div class="small">{{ matchInfo.teams.away.name }}</div>
           </div>
         </div>
       </div>
       <div class="row text-center">
-        <div class="col-md-3">
-          <p class="mb-2"><strong>Fecha:</strong><br>{{ getMatchTime() }}</p>
+        <div class="col-6">
+          <p class="mb-1" style="font-size: 0.95rem;"><strong>Fecha:</strong><br>{{ getMatchTime() }}</p>
         </div>
-        <div class="col-md-3">
-          <p class="mb-2"><strong>Estadio:</strong><br>{{ matchInfo.fixture.venue.name }}</p>
-        </div>
-        <div class="col-md-3">
-          <p class="mb-2"><strong>Ciudad:</strong><br>{{ matchInfo.fixture.venue.city }}</p>
-        </div>
-        <div class="col-md-3">
-          <p class="mb-2"><strong>Árbitro:</strong><br>{{ matchInfo.fixture.referee }}</p>
+        <div class="col-6">
+          <p class="mb-1" style="font-size: 0.95rem;"><strong>Estadio:</strong><br>{{ matchInfo.fixture.venue.name }}</p>
         </div>
       </div>
     </div>
@@ -101,7 +95,7 @@
             <td>{{ p.second_half_score }}</td>
             <td>
               <button class="btn btn-primary btn-sm" (click)="seleccionarParticipante(p)">
-                <i class="bi bi-pencil-square me-1"></i>Seleccionar
+                <i class="bi bi-pencil-square me-1"></i>Editar
               </button>
             </td>
           </tr>
@@ -218,4 +212,8 @@
       </div>
     </div>
   </div>
+
+  <a href="https://marioestebanortega.github.io/pollafutbolerabe/" target="_blank" class="btn-fab-ir-polla" title="Ir a la Polla">
+    <i class="bi bi-trophy-fill"></i> Ir a la Polla
+  </a>
 </div> 

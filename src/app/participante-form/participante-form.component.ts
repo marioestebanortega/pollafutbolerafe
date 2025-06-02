@@ -198,9 +198,9 @@ export class ParticipanteFormComponent implements OnInit {
             this.mostrarTabla = true;
             this.loadParticipantes();
           },
-          error: (error: Error) => {
+          error: (error: any) => {
             this.loading = false;
-            this.mensajeError = 'Error al actualizar la predicción';
+            this.mensajeError = error?.error?.error || error?.error?.message || error?.message || 'Error al actualizar la predicción';
             console.error('Error:', error);
           }
         });
@@ -215,9 +215,9 @@ export class ParticipanteFormComponent implements OnInit {
             this.mostrarTabla = true;
             this.loadParticipantes();
           },
-          error: (error: Error) => {
+          error: (error: any) => {
             this.loading = false;
-            this.mensajeError = 'Error al registrar el participante';
+            this.mensajeError = error?.error?.error || error?.error?.message || error?.message || 'Error al registrar el participante';
             console.error('Error:', error);
           }
         });
