@@ -12,12 +12,13 @@
     <hr>
   
   </div>
-  <ng-container *ngIf="resultados && !loading">
+
+  <ng-container *ngIf="matchInfo">
     <div class="text-center mb-4">
-      <img [src]="resultados.equipos.league.logo" alt="Logo Torneo" style="height:60px;">
-      <h1 class="mt-2">{{ resultados.equipos.home.name }} vs {{ resultados.equipos.away.name }}</h1>
-      <div class="text-muted">{{ resultados.estadio.nombre }}, {{ resultados.estadio.ciudad }}</div>
-      <div class="text-muted">{{ resultados.status.estado }} ({{ resultados.status.minutos }}<span *ngIf="resultados.status.tiempo_extra">+{{ resultados.status.tiempo_extra }}</span>')</div>
+      <img [src]="matchInfo.league.logo" alt="Logo Torneo" style="height:60px;">
+      <h1 class="mt-2">{{ matchInfo.teams.home.name }} vs {{ matchInfo.teams.away.name }}</h1>
+      <div class="text-muted">{{ matchInfo.fixture.venue.name }}, {{ matchInfo.fixture.venue.city }}</div>
+      <div class="text-muted">{{ matchInfo.fixture.date | date:'full' }}</div>
     </div>
     <div class="alert alert-info text-center mb-4">
       <strong>¿Cómo se calculan los puntos?</strong><br>
@@ -28,17 +29,38 @@
     </div>
     <div class="row justify-content-center mb-4">
       <div class="col-auto text-center">
-        <img [src]="resultados.equipos.home.logo" alt="Local" style="height:80px;">
-        <div class="fw-bold">{{ resultados.equipos.home.name }}</div>
+        <img [src]="matchInfo.teams.home.logo" alt="Local" style="height:80px;">
+        <div class="fw-bold">{{ matchInfo.teams.home.name }}</div>
       </div>
       <div class="col-auto align-self-center text-center">
-        <div class="fw-bold text-primary" style="font-size:2.2rem;">{{ resultados.resultado_real.final_score }}</div>
+        <div *ngIf="resultados; else marcadorPlaceholder" class="fw-bold text-primary" style="font-size:2.2rem;">
+          {{ resultados.resultado_real.final_score }}
+        </div>
+        <ng-template #marcadorPlaceholder>
+          <div class="fw-bold text-secondary" style="font-size:2.2rem;">-</div>
+        </ng-template>
       </div>
       <div class="col-auto text-center">
-        <img [src]="resultados.equipos.away.logo" alt="Visitante" style="height:80px;">
-        <div class="fw-bold">{{ resultados.equipos.away.name }}</div>
+        <img [src]="matchInfo.teams.away.logo" alt="Visitante" style="height:80px;">
+        <div class="fw-bold">{{ matchInfo.teams.away.name }}</div>
       </div>
     </div>
+    <div *ngIf="resultados" class="text-muted">
+      {{ resultados.status.estado }} ({{ resultados.status.minutos }}<span *ngIf="resultados.status.tiempo_extra">+{{ resultados.status.tiempo_extra }}</span>')
+    </div>
+  </ng-container>
+
+  <div *ngIf="waitingForResults && !loading" class="alert alert-info text-center mt-5">
+    <h4 class="alert-heading">Resultados no disponibles</h4>
+    <p>Los resultados estarán disponibles una vez inicie el partido.</p>
+    <div class="container mt-4">
+      <div class="d-flex justify-content-end mb-3">
+        <button class="btn btn-primary" (click)="irARegistro()">Registrar / Editar predicción</button>
+      </div>
+    </div>
+  </div>
+
+  <ng-container *ngIf="resultados && !loading">
     <div class="container mt-4">
       <div class="d-flex justify-content-end mb-3">
         <button class="btn btn-primary" (click)="irARegistro()">Registrar / Editar predicción</button>
@@ -65,8 +87,8 @@
             <td>{{ r.score }}</td>
             <td class="text-center">
               <ng-container>
-                <img *ngIf="r.predictions.winner && r.predictions.winner.toLowerCase() === resultados.equipos.home.name.toLowerCase()" [src]="resultados.equipos.home.logo" alt="Local" style="height:32px;">
-                <img *ngIf="r.predictions.winner && r.predictions.winner.toLowerCase() === resultados.equipos.away.name.toLowerCase()" [src]="resultados.equipos.away.logo" alt="Visitante" style="height:32px;">
+                <img *ngIf="showHomeLogo(r)" [src]="getHomeLogo()" alt="Local" style="height:32px;">
+                <img *ngIf="showAwayLogo(r)" [src]="getAwayLogo()" alt="Visitante" style="height:32px;">
                 <span *ngIf="r.predictions.winner && r.predictions.winner.toLowerCase() === 'empate'" class="fs-3 fw-bold text-primary">E</span>
               </ng-container>
             </td>
@@ -80,3 +102,4 @@
     </div>
   </ng-container>
 </div>
+
