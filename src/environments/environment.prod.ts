@@ -1,4 +1,4 @@
 export const environment = {
   production: true,
-  apiUrl: 'http://127.0.0.1:10000'
+  apiUrl: 'https://pollafutbolerabe.onrender.com'
 }; 

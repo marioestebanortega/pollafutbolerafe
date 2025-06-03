@@ -2,13 +2,14 @@ import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ReactiveFormsModule, FormBuilder, FormGroup, Validators, AbstractControl, ValidationErrors, ValidatorFn } from '@angular/forms';
 import { FormsModule } from '@angular/forms';
+import { RouterModule } from '@angular/router';
 import { ParticipanteService, ParticipanteResponse } from '../services/participante.service';
 import { PartidoService, MatchInfo } from '../services/partido.service';
 
 @Component({
   selector: 'app-participante-form',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule, FormsModule],
+  imports: [CommonModule, ReactiveFormsModule, FormsModule, RouterModule],
   templateUrl: './participante-form.component.html',
   styleUrls: ['./participante-form.component.scss']
 })
