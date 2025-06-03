@@ -20,6 +20,7 @@ export class ResultadosPollaComponent implements OnInit, OnDestroy {
 
   ngOnInit() {
     this.cargarResultados();
+    this.retryInterval = setInterval(() => this.cargarResultados(), 10000);
   }
 
   ngOnDestroy() {
@@ -35,17 +36,17 @@ export class ResultadosPollaComponent implements OnInit, OnDestroy {
       next: (data) => {
         this.resultados = data;
         this.loading = false;
-        if (this.retryInterval) {
-          clearInterval(this.retryInterval);
-          this.retryInterval = null;
+        // Logger para depuración de predicciones
+        if (this.resultados && this.resultados.resultados) {
+          console.log('Resultados recibidos:', this.resultados.resultados);
+          this.resultados.resultados.forEach((r, i) => {
+            console.log(`Fila ${i}: predictions.winner =`, r.predictions.winner);
+          });
         }
       },
       error: (err) => {
         if (err.status === 0) {
           this.error = 'Estamos intentando conectarnos, por favor espera un momento...';
-          if (!this.retryInterval) {
-            this.retryInterval = setInterval(() => this.cargarResultados(), 10000);
-          }
         } else {
           this.error = err?.error?.error || err?.message || 'Error al obtener los resultados';
         }

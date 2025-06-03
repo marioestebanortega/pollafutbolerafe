@@ -64,10 +64,10 @@
             <td>{{ r.name }}</td>
             <td>{{ r.score }}</td>
             <td class="text-center">
-              <ng-container [ngSwitch]="r.predictions.winner.toLowerCase()">
-                <img *ngSwitchCase="'local'" [src]="resultados.equipos.home.logo" alt="Local" style="height:32px;">
-                <img *ngSwitchCase="'visitante'" [src]="resultados.equipos.away.logo" alt="Visitante" style="height:32px;">
-                <span *ngSwitchDefault class="fs-3 fw-bold text-primary">E</span>
+              <ng-container>
+                <img *ngIf="r.predictions.winner && r.predictions.winner.toLowerCase() === resultados.equipos.home.name.toLowerCase()" [src]="resultados.equipos.home.logo" alt="Local" style="height:32px;">
+                <img *ngIf="r.predictions.winner && r.predictions.winner.toLowerCase() === resultados.equipos.away.name.toLowerCase()" [src]="resultados.equipos.away.logo" alt="Visitante" style="height:32px;">
+                <span *ngIf="r.predictions.winner && r.predictions.winner.toLowerCase() === 'empate'" class="fs-3 fw-bold text-primary">E</span>
               </ng-container>
             </td>
             <td>{{ r.predictions.winner }}</td>
