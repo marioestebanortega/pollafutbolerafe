@@ -1,4 +1,5 @@
 @use "sass:color";
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&display=swap');
 
 // Variables
 $primary-color: #2c3e50;
@@ -21,6 +22,144 @@ $transition-speed: 0.3s;
   border-radius: $border-radius;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
   transition: transform $transition-speed ease;
+}
+
+:host {
+  font-family: 'Montserrat', Arial, sans-serif;
+  background: linear-gradient(135deg, #f8fafc 0%, #e0e7ef 100%);
+  min-height: 100vh;
+  color: #222;
+}
+
+.container {
+  max-width: 700px;
+  margin: 0 auto;
+  padding: 1.5rem 0.5rem;
+}
+
+.card, .form-container, .match-info {
+  background: #fff;
+  border-radius: 18px;
+  box-shadow: 0 2px 12px rgba(44,62,80,0.07);
+  margin-bottom: 2rem;
+  padding: 1.5rem 1rem;
+}
+
+.btn-primary, .btn-success {
+  background: linear-gradient(90deg, #1976d2 0%, #42a5f5 100%);
+  border: none;
+  color: #fff;
+  font-weight: bold;
+  font-size: 1.15rem;
+  border-radius: 12px;
+  padding: 0.8rem 2rem;
+  box-shadow: 0 2px 8px rgba(25,118,210,0.08);
+  transition: background 0.2s, transform 0.2s;
+}
+.btn-primary:hover, .btn-success:hover {
+  background: linear-gradient(90deg, #1565c0 0%, #1e88e5 100%);
+  transform: translateY(-2px) scale(1.03);
+}
+
+input.form-control, select.form-select {
+  border: 2px solid #e9ecef;
+  border-radius: 10px;
+  padding: 0.75rem 1rem;
+  font-size: 1.15rem;
+  margin-bottom: 0.7rem;
+  transition: border-color 0.2s;
+}
+input.form-control:focus, select.form-select:focus {
+  border-color: #1976d2;
+  box-shadow: 0 0 0 0.2rem rgba(25,118,210,0.13);
+}
+
+.alert {
+  border-radius: 14px;
+  padding: 1rem;
+  margin-bottom: 1rem;
+  border: none;
+  font-size: 1.08rem;
+}
+.alert-success {
+  background-color: #d4edda;
+  color: #155724;
+}
+.alert-danger {
+  background-color: #f8d7da;
+  color: #721c24;
+}
+
+.table {
+  background: #fff;
+  border-radius: 14px;
+  box-shadow: 0 2px 12px rgba(44,62,80,0.07);
+  overflow: hidden;
+  font-size: 1.08rem;
+}
+.table thead {
+  background: #1976d2;
+  color: #fff;
+  font-weight: bold;
+}
+.table-striped tbody tr:nth-of-type(odd) {
+  background: #f1f8ff;
+}
+.table-hover tbody tr:hover {
+  background: #e3f2fd;
+}
+.table th, .table td {
+  padding: 1rem 0.5rem;
+  text-align: center;
+}
+
+.btn-fab-ir-polla {
+  position: fixed;
+  right: 24px;
+  bottom: 24px;
+  z-index: 9999;
+  background: #198754;
+  color: #fff !important;
+  font-weight: bold;
+  font-size: 1.15rem;
+  padding: 0.9rem 1.5rem;
+  border-radius: 32px;
+  box-shadow: 0 4px 16px rgba(0,0,0,0.18);
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  transition: background 0.2s;
+  text-decoration: none;
+}
+.btn-fab-ir-polla:hover {
+  background: #145c32;
+  color: #fff !important;
+}
+
+::-webkit-scrollbar {
+  height: 8px;
+  background: #e3f2fd;
+}
+::-webkit-scrollbar-thumb {
+  background: #90caf9;
+  border-radius: 8px;
+}
+
+@media (max-width: 600px) {
+  .container {
+    padding: 0.5rem 0.1rem;
+  }
+  .table th, .table td {
+    padding: 0.6rem 0.2rem;
+    font-size: 0.98rem;
+  }
+  .btn-primary, .btn-success {
+    font-size: 1rem;
+    padding: 0.7rem 1.2rem;
+  }
+  .card, .form-container, .match-info {
+    padding: 1rem 0.2rem;
+  }
 }
 
 // Welcome Section
@@ -171,24 +310,6 @@ $transition-speed: 0.3s;
     &:active {
       transform: translateY(0);
     }
-  }
-}
-
-// Alert Styles
-.alert {
-  border-radius: $border-radius;
-  padding: 1rem;
-  margin-bottom: 1rem;
-  border: none;
-
-  &.alert-success {
-    background-color: #d4edda;
-    color: #155724;
-  }
-
-  &.alert-danger {
-    background-color: #f8d7da;
-    color: #721c24;
   }
 }
 

@@ -50,15 +50,16 @@
     </div>
   </ng-container>
 
-  <div *ngIf="waitingForResults && !loading" class="alert alert-info text-center mt-5">
-    <h4 class="alert-heading">Resultados no disponibles</h4>
-    <p>Los resultados estarán disponibles una vez inicie el partido.</p>
-    <div class="container mt-4">
-      <div class="d-flex justify-content-end mb-3">
-        <button class="btn btn-primary" (click)="irARegistro()">Registrar / Editar predicción</button>
-      </div>
+ <!-- Eliminamos la clase alert-info que da fondo azul -->
+<div *ngIf="waitingForResults && !loading" class="text-center mt-5">
+  <div class="container mt-4">
+    <div class="d-flex justify-content-center">
+      <button class="btn btn-primary" (click)="irARegistro()">
+        Registrar / Editar predicción
+      </button>
     </div>
   </div>
+</div>
 
   <ng-container *ngIf="resultados && !loading">
     <div class="container mt-4">

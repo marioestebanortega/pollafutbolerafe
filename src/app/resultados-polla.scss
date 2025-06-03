@@ -1,0 +1,104 @@
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&display=swap');
+
+:host {
+  font-family: 'Montserrat', Arial, sans-serif;
+  background: linear-gradient(135deg, #f8fafc 0%, #e0e7ef 100%);
+  min-height: 100vh;
+  color: #222;
+}
+
+.container {
+  max-width: 700px;
+  margin: 0 auto;
+  padding: 1.5rem 0.5rem;
+}
+
+.text-center.mb-4 {
+  background: #fff;
+  border-radius: 18px;
+  box-shadow: 0 2px 12px rgba(44,62,80,0.07);
+  padding: 1.5rem 1rem 1rem 1rem;
+  margin-bottom: 2rem;
+}
+
+.alert-info {
+  background: linear-gradient(90deg, #e0f7fa 0%, #b2ebf2 100%);
+  color: #006064;
+  border: none;
+  font-size: 1.1rem;
+  border-radius: 14px;
+}
+
+.btn-primary {
+  background: linear-gradient(90deg, #1976d2 0%, #42a5f5 100%);
+  border: none;
+  color: #fff;
+  font-weight: bold;
+  font-size: 1.15rem;
+  border-radius: 12px;
+  padding: 0.8rem 2rem;
+  box-shadow: 0 2px 8px rgba(25,118,210,0.08);
+  transition: background 0.2s, transform 0.2s;
+}
+.btn-primary:hover {
+  background: linear-gradient(90deg, #1565c0 0%, #1e88e5 100%);
+  transform: translateY(-2px) scale(1.03);
+}
+
+.table {
+  background: #fff;
+  border-radius: 14px;
+  box-shadow: 0 2px 12px rgba(44,62,80,0.07);
+  overflow: hidden;
+  font-size: 1.08rem;
+}
+.table thead {
+  background: #1976d2;
+  color: #fff;
+  font-weight: bold;
+}
+.table-striped tbody tr:nth-of-type(odd) {
+  background: #f1f8ff;
+}
+.table-hover tbody tr:hover {
+  background: #e3f2fd;
+}
+.table th, .table td {
+  padding: 1rem 0.5rem;
+  text-align: center;
+}
+
+@media (max-width: 600px) {
+  .container {
+    padding: 0.5rem 0.1rem;
+  }
+  .table th, .table td {
+    padding: 0.6rem 0.2rem;
+    font-size: 0.98rem;
+  }
+  .btn-primary {
+    font-size: 1rem;
+    padding: 0.7rem 1.2rem;
+  }
+  .text-center.mb-4 {
+    padding: 1rem 0.2rem 0.7rem 0.2rem;
+  }
+}
+
+img[alt="Logo Torneo"], img[alt="Local"], img[alt="Visitante"] {
+  filter: drop-shadow(0 2px 6px rgba(25,118,210,0.13));
+  border-radius: 12px;
+}
+
+.fw-bold.text-primary {
+  color: #1976d2 !important;
+}
+
+::-webkit-scrollbar {
+  height: 8px;
+  background: #e3f2fd;
+}
+::-webkit-scrollbar-thumb {
+  background: #90caf9;
+  border-radius: 8px;
+}
