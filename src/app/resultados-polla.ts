@@ -20,7 +20,7 @@ export class ResultadosPollaComponent implements OnInit, OnDestroy {
 
   ngOnInit() {
     this.cargarResultados();
-    this.retryInterval = setInterval(() => this.cargarResultados(), 10000);
+    this.retryInterval = setInterval(() => this.cargarResultados(), 30000);
   }
 
   ngOnDestroy() {
