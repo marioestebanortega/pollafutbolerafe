@@ -1,6 +1,8 @@
 build<.
 
-ng build --configuration production --base-href=/pollafutbolerafe/
+npx ng build --configuration production --base-href=/pollafutbolerafe/
 
 despñeigue
 npx angular-cli-ghpages --dir=dist/polla-participantes/browser
+
+https://marioestebanortega.github.io/pollafutbolerafe/

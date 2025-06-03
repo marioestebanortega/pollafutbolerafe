@@ -1,7 +1,7 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ResultadosService, ResultadoPolla } from './services/resultados.service';
-import { RouterModule } from '@angular/router';
+import { RouterModule, Router } from '@angular/router';
 
 @Component({
   selector: 'app-resultados-polla',
@@ -16,7 +16,7 @@ export class ResultadosPollaComponent implements OnInit, OnDestroy {
   error: string = '';
   private retryInterval: any = null;
 
-  constructor(private resultadosService: ResultadosService) {}
+  constructor(private resultadosService: ResultadosService, private router: Router) {}
 
   ngOnInit() {
     this.cargarResultados();
@@ -56,6 +56,6 @@ export class ResultadosPollaComponent implements OnInit, OnDestroy {
   }
 
   irARegistro() {
-    window.location.href = '/participante';
+    this.router.navigate(['/participante']);
   }
 }
