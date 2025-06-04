@@ -76,6 +76,10 @@ export class ResultadosPollaComponent implements OnInit, OnDestroy {
             console.log(`Fila ${i}: predictions.winner =`, r.predictions.winner);
           });
         }
+        // Logger para depuración de resultado_real
+        if (this.resultados && this.resultados.resultado_real) {
+          console.log('resultado_real:', this.resultados.resultado_real);
+        }
         // Detener polling si el partido terminó
         if (this.resultados?.status?.estado === 'Match Finished' && this.retryInterval) {
           clearInterval(this.retryInterval);

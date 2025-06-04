@@ -39,6 +39,11 @@
         <ng-template #marcadorPlaceholder>
           <div class="fw-bold text-secondary" style="font-size:2.2rem;">-</div>
         </ng-template>
+        <div *ngIf="resultados?.resultado_real?.first_half_score || resultados?.resultado_real?.second_half_score" class="mt-2 text-dark" style="font-size:1.1rem;">
+          <span *ngIf="resultados?.resultado_real?.first_half_score">1er Tiempo: <b>{{ resultados?.resultado_real?.first_half_score }}</b></span>
+          <span *ngIf="resultados?.resultado_real?.first_half_score && resultados?.resultado_real?.second_half_score"> | </span>
+          <span *ngIf="resultados?.resultado_real?.second_half_score">2do Tiempo: <b>{{ resultados?.resultado_real?.second_half_score }}</b></span>
+        </div>
       </div>
       <div class="col-auto text-center">
         <img [src]="matchInfo.teams.away.logo" alt="Visitante" style="height:80px;">

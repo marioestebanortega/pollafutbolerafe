@@ -11,7 +11,11 @@ export interface ResultadoPolla {
   };
   estadio: { nombre: string; ciudad: string };
   status: { estado: string; minutos: number; tiempo_extra?: number };
-  resultado_real: { final_score: string };
+  resultado_real: {
+    final_score: string;
+    first_half_score?: string;
+    second_half_score?: string;
+  };
   resultados: Array<{
     posicion: number;
     name: string;
