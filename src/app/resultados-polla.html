@@ -14,44 +14,44 @@
   </div>
 
   <ng-container *ngIf="matchInfo">
-    <div class="text-center mb-4">
-      <img [src]="matchInfo.league.logo" alt="Logo Torneo" style="height:60px;">
-      <h1 class="mt-2">{{ matchInfo.teams.home.name }} vs {{ matchInfo.teams.away.name }}</h1>
-      <div class="text-muted">{{ matchInfo.fixture.venue.name }}, {{ matchInfo.fixture.venue.city }}</div>
-      <div class="text-muted">{{ matchInfo.fixture.date | date:'full' }}</div>
-    </div>
-    <div class="alert alert-info text-center mb-4">
-      <strong>¿Cómo se calculan los puntos?</strong><br>
-      Acierto con Marcador Final: <b>5 puntos</b> &nbsp;|&nbsp;
-      Acierto con solo el ganador o empate sin importar marcador final: <b>3 puntos</b> &nbsp;|&nbsp;
-      Goles en el 1er Tiempo: <b>2 puntos</b> &nbsp;|&nbsp;
-      Goles en el 2do Tiempo: <b>2 puntos</b>
-    </div>
-    <div class="row justify-content-center mb-4">
-      <div class="col-auto text-center">
-        <img [src]="matchInfo.teams.home.logo" alt="Local" style="height:80px;">
-        <div class="fw-bold">{{ matchInfo.teams.home.name }}</div>
+    <div class="card-main">
+      <img [src]="matchInfo.league.logo" alt="Logo Torneo" class="league-logo">
+      <div class="match-title">{{ matchInfo.teams.home.name }} vs {{ matchInfo.teams.away.name }}</div>
+      <div class="match-info">{{ matchInfo.fixture.venue.name }}, {{ matchInfo.fixture.venue.city }}</div>
+      <div class="match-info">{{ matchInfo.fixture.date | date:'full' }}</div>
+      <div class="points-info">
+        <strong>¿Cómo se calculan los puntos?</strong><br>
+        Acierto con Marcador Final: <b>5 puntos</b> &nbsp;|&nbsp;
+        Acierto con solo el ganador o empate sin importar marcador final: <b>3 puntos</b> &nbsp;|&nbsp;
+        Goles en el 1er Tiempo: <b>2 puntos</b> &nbsp;|&nbsp;
+        Goles en el 2do Tiempo: <b>2 puntos</b>
       </div>
-      <div class="col-auto align-self-center text-center">
-        <div *ngIf="resultados; else marcadorPlaceholder" class="fw-bold text-primary" style="font-size:2.2rem;">
-          {{ resultados.resultado_real.final_score }}
+      <div class="teams-row">
+        <div class="text-center">
+          <img [src]="matchInfo.teams.home.logo" alt="Local" class="team-logo">
+          <div class="team-name">{{ matchInfo.teams.home.name }}</div>
         </div>
-        <ng-template #marcadorPlaceholder>
-          <div class="fw-bold text-secondary" style="font-size:2.2rem;">-</div>
-        </ng-template>
-        <div *ngIf="resultados?.resultado_real?.first_half_score || resultados?.resultado_real?.second_half_score" class="mt-2 text-dark" style="font-size:1.1rem;">
-          <span *ngIf="resultados?.resultado_real?.first_half_score">1er Tiempo: <b>{{ resultados?.resultado_real?.first_half_score }}</b></span>
-          <span *ngIf="resultados?.resultado_real?.first_half_score && resultados?.resultado_real?.second_half_score"> | </span>
-          <span *ngIf="resultados?.resultado_real?.second_half_score">2do Tiempo: <b>{{ resultados?.resultado_real?.second_half_score }}</b></span>
+        <div class="align-self-center text-center">
+          <div *ngIf="resultados; else marcadorPlaceholder" class="score-main">
+            {{ resultados.resultado_real.final_score }}
+          </div>
+          <ng-template #marcadorPlaceholder>
+            <div class="score-main text-secondary">-</div>
+          </ng-template>
+          <div *ngIf="resultados?.resultado_real?.first_half_score || resultados?.resultado_real?.second_half_score" class="score-partials">
+            <span *ngIf="resultados?.resultado_real?.first_half_score">1er Tiempo: <b>{{ resultados?.resultado_real?.first_half_score }}</b></span>
+            <br *ngIf="resultados?.resultado_real?.first_half_score && resultados?.resultado_real?.second_half_score">
+            <span *ngIf="resultados?.resultado_real?.second_half_score">2do Tiempo: <b>{{ resultados?.resultado_real?.second_half_score }}</b></span>
+          </div>
+        </div>
+        <div class="text-center">
+          <img [src]="matchInfo.teams.away.logo" alt="Visitante" class="team-logo">
+          <div class="team-name">{{ matchInfo.teams.away.name }}</div>
         </div>
       </div>
-      <div class="col-auto text-center">
-        <img [src]="matchInfo.teams.away.logo" alt="Visitante" style="height:80px;">
-        <div class="fw-bold">{{ matchInfo.teams.away.name }}</div>
+      <div *ngIf="resultados" class="status-info">
+        {{ resultados.status.estado }} ({{ resultados.status.minutos }}<span *ngIf="resultados.status.tiempo_extra">+{{ resultados.status.tiempo_extra }}</span>')
       </div>
-    </div>
-    <div *ngIf="resultados" class="text-muted">
-      {{ resultados.status.estado }} ({{ resultados.status.minutos }}<span *ngIf="resultados.status.tiempo_extra">+{{ resultados.status.tiempo_extra }}</span>')
     </div>
   </ng-container>
 
@@ -67,11 +67,6 @@
 </div>
 
   <ng-container *ngIf="resultados && !loading">
-    <div class="container mt-4">
-      <div class="d-flex justify-content-end mb-3">
-        <button class="btn btn-primary" (click)="irARegistro()">Registrar / Editar predicción</button>
-      </div>
-    </div>
     <div class="table-responsive">
       <table class="table table-striped table-hover align-middle">
         <thead class="table-dark">
@@ -105,6 +100,9 @@
           </tr>
         </tbody>
       </table>
+    </div>
+    <div class="btn-action-fixed">
+      <button class="btn btn-primary" (click)="irARegistro()">Registrar / Editar predicción</button>
     </div>
   </ng-container>
 </div>
