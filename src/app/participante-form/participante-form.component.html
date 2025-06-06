@@ -63,8 +63,17 @@
     </div>
   </div>
 
-  <!-- Tabla de Participantes y Buscador -->
-  <div *ngIf="mostrarTabla">
+  <div class="mb-3 text-end">
+    <button class="btn btn-outline-info" (click)="toggleResumenMarcadores()">
+      {{ mostrarResumenMarcadores ? 'Ocultar' : 'Ver repetidos y premio' }}
+    </button>
+  </div>
+  <app-resumen-marcadores *ngIf="mostrarResumenMarcadores"
+    [participantes]="participantesFiltrados"
+    [valorPorParticipante]="valorPorParticipante">
+  </app-resumen-marcadores>
+  <div *ngIf="mostrarTabla && !mostrarResumenMarcadores">
+    <!-- Tabla de Participantes y Buscador -->
     <div class="d-flex justify-content-between align-items-center mb-3">
       <h2 class="h4 mb-0">Participantes Inscritos</h2>
       <button class="btn btn-success" (click)="nuevoRegistro()">
@@ -78,26 +87,26 @@
       <table class="table table-striped table-hover">
         <thead>
           <tr>
+            <th>Acción</th>
             <th>Nombre</th>
-            <th>Celular</th>
             <th>Ganador</th>
             <th>1er Tiempo</th>
             <th>2do Tiempo</th>
-            <th>Acción</th>
+            <th>Marcador Completo</th>
           </tr>
         </thead>
         <tbody>
           <tr *ngFor="let p of participantesFiltrados">
-            <td>{{ p.name }}</td>
-            <td>{{ p.phone }}</td>
-            <td>{{ p.winner }}</td>
-            <td>{{ p.first_half_score }}</td>
-            <td>{{ p.second_half_score }}</td>
             <td>
               <button class="btn btn-primary btn-sm" (click)="seleccionarParticipante(p)">
                 <i class="bi bi-pencil-square me-1"></i>Editar
               </button>
             </td>
+            <td>{{ p.name }}</td>
+            <td>{{ p.winner }}</td>
+            <td>{{ p.first_half_score }}</td>
+            <td>{{ p.second_half_score }}</td>
+            <td>{{ calcularMarcadorCompleto(p.first_half_score, p.second_half_score) }}</td>
           </tr>
           <tr *ngIf="participantesFiltrados.length === 0">
             <td colspan="6" class="text-center text-muted">No se encontraron participantes.</td>

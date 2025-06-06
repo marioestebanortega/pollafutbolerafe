@@ -1,0 +1,35 @@
+<div class="resumen-marcadores-container">
+  <h2 class="mb-3">Repetidos y premios acumulados</h2>
+
+  <div *ngIf="participantes.length === 0" class="alert alert-info">
+    No hay predicciones registradas aún.
+  </div>
+
+  <div *ngIf="participantes.length > 0">
+    <h4 class="mt-4">Repetidos</h4>
+    <table class="table table-bordered table-striped mb-4">
+      <thead>
+        <tr>
+          <th>Combinación</th>
+          <th>Frecuencia</th>
+          <th>Participantes</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let c of combinacionesFrecuentes">
+          <td><b>{{ c.combinacion }}</b></td>
+          <td>{{ c.frecuencia }}</td>
+          <td>
+            <span *ngFor="let nombre of c.participantes; let last = last">
+              {{ nombre }}<span *ngIf="!last">, </span>
+            </span>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+
+    <div class="alert alert-primary btnAcumulado">
+      <b>Premio acumulado:</b> {{ formatearMoneda(valorTotalPremio) }}
+    </div>
+  </div>
+</div>

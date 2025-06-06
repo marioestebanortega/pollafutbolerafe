@@ -5,11 +5,12 @@ import { FormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
 import { ParticipanteService, ParticipanteResponse } from '../services/participante.service';
 import { PartidoService, MatchInfo } from '../services/partido.service';
+import { ResumenMarcadoresComponent } from '../resumen-marcadores/resumen-marcadores';
 
 @Component({
   selector: 'app-participante-form',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule, FormsModule, RouterModule],
+  imports: [CommonModule, ReactiveFormsModule, FormsModule, RouterModule, ResumenMarcadoresComponent],
   templateUrl: './participante-form.component.html',
   styleUrls: ['./participante-form.component.scss']
 })
@@ -27,6 +28,8 @@ export class ParticipanteFormComponent implements OnInit {
   participantesFiltrados: { name: string; phone: string; winner: string; first_half_score: string; second_half_score: string }[] = [];
   filtro: string = '';
   mostrarTabla: boolean = true;
+  mostrarResumenMarcadores = false;
+  valorPorParticipante = 10000;
 
   // Custom validator for winner coherence as a class property to access this.matchInfo
   winnerCoherenceValidator: ValidatorFn = (control: AbstractControl): ValidationErrors | null => {
@@ -237,6 +240,17 @@ export class ParticipanteFormComponent implements OnInit {
       hour: '2-digit',
       minute: '2-digit'
     });
+  }
+
+  toggleResumenMarcadores() {
+    this.mostrarResumenMarcadores = !this.mostrarResumenMarcadores;
+  }
+
+  calcularMarcadorCompleto(first: string, second: string): string {
+    if (!/^\d+-\d+$/.test(first) || !/^\d+-\d+$/.test(second)) return '';
+    const [fhL, fhV] = first.split('-').map(Number);
+    const [shL, shV] = second.split('-').map(Number);
+    return `${fhL + shL}-${fhV + shV}`;
   }
 }
 
